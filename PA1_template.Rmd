@@ -78,7 +78,7 @@ ggplot(meanStepsPerInterval, aes(x=interval, y=steps)) +
 ```
 
 The five-minute interval starting at **835** represents the most active time,
-with ***206.1698** steps o average.  This was found by calling the code below
+with ***206.1698*** steps on average.  This was found by calling the code below
 
 ```{r, echo=TRUE, eval=TRUE}
 meanStepsPerInterval[which.max(meanStepsPerInterval$steps),]
@@ -108,6 +108,11 @@ for (i in 1:length(data$steps)) {
 }
 ```
 
+We check that we have successfully removed the NA values in `data$steps`
+
+```{r, echo=TRUE, eval=TRUE}
+any(is.na(data$steps))
+```
 
 ## Are there differences in activity patterns between weekdays and weekends? ##
 
@@ -141,14 +146,16 @@ plot(interval, df[,"weekend"], type="l",
 ```
 
 ```{r, echo=TRUE, eval=TRUE}
+library(ggplot2)
 library(plyr)
 df <- ddply(.data=data.frame(data$steps),
             .variables=.(data$interval, type),
             colwise(mean))
 names(df) <- c("interval", "type", "stepsPerInterval")
-ggplot(df, aes(x=interval, y=stepsPerInterval)) +
+ggplot(df, aes(x=interval, y=stepsPerInterval, xlab="Interval")) +
     geom_line() +
     facet_grid(type~.) +
+    ggtitle("Activity pattern on on weekdays versus weekends") +
     xlab("Interval") +
     ylab("Average number of steps")
 ```

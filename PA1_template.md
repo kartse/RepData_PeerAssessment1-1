@@ -2,7 +2,8 @@
 
 ## Loading the preprocessing the data ##
 
-We unzip and load the data, downloaded from [the coursera website][data], and then inspect it for sanity.
+We unzip and load the data, downloaded from [the coursera website][data], and
+then inspect it for sanity.
 
 
 ```r
@@ -23,7 +24,8 @@ summary(data)
 ```
 
 
-We extract two data frames representing the number of steps per day and the mean steps per time interval.
+We extract two data frames representing the number of steps per day and the mean
+steps per time interval.
 
 
 ```r
@@ -36,7 +38,9 @@ meanStepsPerInterval <- data.frame(meanStepsPerInterval)
 
 
 ## What is the mean total number of steps taken per day? ##
-We use ggplot2 to create a histogram of the average number of steps taken per day.
+
+We use ggplot2 to create a histogram of the average number of steps taken per
+day.
 
 
 
@@ -52,7 +56,8 @@ qplot(x = steps, data = stepsPerDay, binwidth = max(stepsPerDay$steps)/5, main =
 
 
 The **mean** number of steps per day is **10766**, and the **median** number of
-steps per day is **10765**.  This was found using the code below, but can also be found by calling `summary(stepsPerDay)`.
+steps per day is **10765**.  This was found using the code below, but can also
+be found by calling `summary(stepsPerDay)`.
 
 
 ```r
@@ -90,7 +95,8 @@ ggplot(meanStepsPerInterval, aes(x = interval, y = steps)) + geom_line() + ggtit
 ![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
 
 
-The five-minute interval starting at **835** represents the most active time, with ***206.1698** steps o average.  This was found by calling the code below
+The five-minute interval starting at **835** represents the most active time,
+with ***206.1698*** steps on average.  This was found by calling the code below
 
 
 ```r
@@ -105,7 +111,9 @@ meanStepsPerInterval[which.max(meanStepsPerInterval$steps), ]
 
 ## Imputing missing values ##
 
-The total number of missing values in the dataset is **2304**.  This was found by running the code below, though it an also be found by calling `summary(data)`.
+The total number of missing values in the dataset is **2304**.  This was found
+by running the code below, though it an also be found by calling
+`summary(data)`.
 
 
 ```r
@@ -132,6 +140,17 @@ for (i in 1:length(data$steps)) {
 ```
 
 
+We check that there are no more NA values in `data$steps`
+
+
+```r
+any(is.na(data$steps))
+```
+
+```
+## [1] FALSE
+```
+
 
 ## Are there differences in activity patterns between weekdays and weekends? ##
 
@@ -155,15 +174,17 @@ across all weekday days or weekend days.
 
 
 ```r
+library(ggplot2)
 library(plyr)
 df <- ddply(.data = data.frame(data$steps), .variables = .(data$interval, type), 
     colwise(mean))
 names(df) <- c("interval", "type", "stepsPerInterval")
-ggplot(df, aes(x = interval, y = stepsPerInterval)) + geom_line() + facet_grid(type ~ 
-    .) + xlab("Interval") + ylab("Average number of steps")
+ggplot(df, aes(x = interval, y = stepsPerInterval, xlab = "Interval")) + geom_line() + 
+    facet_grid(type ~ .) + ggtitle("Activity pattern on on weekdays versus weekends") + 
+    xlab("Interval") + ylab("Average number of steps")
 ```
 
-![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13.png) 
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14.png) 
 
 
 [data]: https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip
