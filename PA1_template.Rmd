@@ -2,7 +2,8 @@
 
 ## Loading the preprocessing the data ##
 
-We unzip and load the data, downloaded from [the coursera website][data], and then inspect it for sanity.
+We unzip and load the data, downloaded from [the coursera website][data], and
+then inspect it for sanity.
 
 ```{r, warning=FALSE}
 unzip("activity.zip", overwrite=FALSE)
@@ -10,7 +11,8 @@ data <- read.csv(file="activity.csv",colClasses=c("integer", "Date", "integer"))
 summary(data)
 ```
 
-We extract two data frames representing the number of steps per day and the mean steps per time interval.
+We extract two data frames representing the number of steps per day and the mean
+steps per time interval.
 
 ```{r}
 stepsPerDay <- aggregate(steps~date, data=data, sum, na.rm=TRUE)
@@ -21,7 +23,9 @@ meanStepsPerInterval <- data.frame(meanStepsPerInterval)
 ```
 
 ## What is the mean total number of steps taken per day? ##
-We use ggplot2 to create a histogram of the average number of steps taken per day.
+
+We use ggplot2 to create a histogram of the average number of steps taken per
+day.
 
 ```{r, echo=FALSE, eval=FALSE}
 ## IGNORE THIS CHUNK!!! ##
@@ -43,7 +47,8 @@ qplot(x=steps,
 ```
 
 The **mean** number of steps per day is **10766**, and the **median** number of
-steps per day is **10765**.  This was found using the code below, but can also be found by calling `summary(stepsPerDay)`.
+steps per day is **10765**.  This was found using the code below, but can also
+be found by calling `summary(stepsPerDay)`.
 
 ```{r, echo=TRUE, eval=TRUE}
 mean(stepsPerDay$steps); median(stepsPerDay$steps)
@@ -72,7 +77,8 @@ ggplot(meanStepsPerInterval, aes(x=interval, y=steps)) +
     ylab("Average steps taken")
 ```
 
-The five-minute interval starting at **835** represents the most active time, with ***206.1698** steps o average.  This was found by calling the code below
+The five-minute interval starting at **835** represents the most active time,
+with ***206.1698** steps o average.  This was found by calling the code below
 
 ```{r, echo=TRUE, eval=TRUE}
 meanStepsPerInterval[which.max(meanStepsPerInterval$steps),]
@@ -80,7 +86,9 @@ meanStepsPerInterval[which.max(meanStepsPerInterval$steps),]
 
 ## Imputing missing values ##
 
-The total number of missing values in the dataset is **2304**.  This was found by running the code below, though it an also be found by calling `summary(data)`.
+The total number of missing values in the dataset is **2304**.  This was found
+by running the code below, though it an also be found by calling
+`summary(data)`.
 
 ```{r, echo=TRUE, eval=TRUE}
 sum(is.na(data$steps))
@@ -91,7 +99,7 @@ corresponding interval.
 
 ```{r, echo=TRUE, eval=TRUE}
 getMeanSteps <- function(interval) {
-    meanStepsPerInterval[which(meanStepsPerInterval$interval==interval),]$steps   
+    meanStepsPerInterval[which(meanStepsPerInterval$interval==interval),]$steps
 }
 for (i in 1:length(data$steps)) {
     data$steps[i] <- ifelse(is.na(data$steps[i]),
